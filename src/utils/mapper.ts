@@ -10,6 +10,7 @@ export const toRestaurant = (
     placeId: result.place_id,
     photoUrl: url,
     address: result.vicinity,
+    googleMapsUrl: result.url,
     location: {
       lat: result.geometry?.location?.lat(),
       lng: result.geometry?.location?.lng(),

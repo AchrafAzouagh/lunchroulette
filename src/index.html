@@ -1,12 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WebCV</title>
-</head>
-<body>
+  <head>
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self' 'unsafe-inline' data: gap: ws: ; 
+    style-src 'unsafe-inline' 'self' https: *.googleapis.com; 
+    script-src 'unsafe-inline' 'self' https: *.googleapis.com;
+    media-src 'none'; 
+    font-src * 'unsafe-inline' ;
+    connect-src * 'unsafe-inline';
+    img-src 'unsafe-inline' 'self' data: content: https: *.googleapis.com;"
+    />
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lunch Roulette</title>
+  </head>
+  <body>
     <div id="root"></div>
-</body>
+  </body>
 </html>

@@ -1,5 +1,5 @@
-const webpack = require('webpack')
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin')
+import { DefinePlugin } from 'webpack'
 
 module.exports = {
   mode: 'development',
@@ -9,9 +9,9 @@ module.exports = {
   },
   devtool: 'cheap-module-source-map',
   plugins: [
-    new webpack.DefinePlugin({
+    new DefinePlugin({
       'process.env': {
-        API_KEY: JSON.stringify(process.env.MAPS_API_KEY),
+        MAPS_API_KEY: JSON.stringify(process.env.MAPS_API_KEY),
       },
     }),
     // Specify development API URL

@@ -1,16 +1,15 @@
-// const webpack = require('webpack');
+const webpack = require('webpack')
 //const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
 
 module.exports = {
   mode: 'production',
   devtool: 'source-map',
   plugins: [
-    // Specify production API URL
-    // new webpack.DefinePlugin({
-    //   'process.env': {
-    //     NODE_ENV: JSON.stringify('development'),
-    //   },
-    // }),
+    new webpack.DefinePlugin({
+      'process.env': {
+        API_KEY: JSON.stringify(process.env.MAPS_API_KEY),
+      },
+    }),
     //new BundleAnalyzerPlugin(),
   ],
 }

@@ -11,6 +11,7 @@ import { RestaurantResponse } from '../utils/types'
 import Restaurant from './Restaurant'
 import { ShuffleButton } from './ShuffleButton'
 import LoadingIndicator from './LoadingIndicator'
+import { filterRestaurants } from '../utils/utils'
 
 const RestaurantCard: React.FC = () => {
   const [restaurants, setRestaurants] = useState<RestaurantResponse[]>([])
@@ -52,9 +53,7 @@ const RestaurantCard: React.FC = () => {
       const location = await getCurrentLocation()
       const response = await getNearbyRestaurants(location)
 
-      const filteredRestaurants = response?.filter(
-        (restaurant: RestaurantResponse) => restaurant.rating! >= 4.2
-      ) as RestaurantResponse[]
+      const filteredRestaurants = filterRestaurants(response)
 
       const fetchedDetails = buildRestaurantDetails(
         location,

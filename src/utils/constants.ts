@@ -1,1 +1,1 @@
-export const SEARCH_RADIUS = 1000
+export const SEARCH_RADIUS = 1500

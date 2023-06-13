@@ -1,44 +1,40 @@
 import { FC } from 'react'
 import ProgressiveImage from 'react-progressive-graceful-image'
 import LoadingIndicator from './LoadingIndicator'
+import { truncateStringToLength } from '../utils/utils'
+import MapsIcon from '../assets/images/google-maps.svg'
+import { RestaurantResponse } from '../utils/types'
 
 interface Props {
-  name: string | undefined
-  placeId: string | undefined
-  photoUrl: string | undefined
-  rating: number | undefined
-  address: string | undefined
-  url: string | undefined
-  distance: string | undefined
-  duration: string | undefined
+  currentRestaurant: RestaurantResponse
 }
 
-const Restaurant: FC<Props> = ({
-  name,
-  placeId,
-  photoUrl,
-  rating,
-  address,
-  url,
-  duration,
-  distance,
-}) => {
+const Restaurant: FC<Props> = ({ currentRestaurant }) => {
   return (
     <div className="h-100 w-50">
-      <h1 className="text-white text-center font-bold mb-3 text-xl hover:text-gray-300 font-heading">
-        {name}
-      </h1>
-      <ProgressiveImage src={photoUrl as string} placeholder={name}>
+      <a href={currentRestaurant.googleMapsUrl} target="_blank">
+        <h1 className="text-white text-center font-bold mb-3 text-xl hover:text-gray-300 font-heading">
+          {currentRestaurant.name}
+        </h1>
+      </a>
+      <ProgressiveImage
+        src={currentRestaurant.photoUrl as string}
+        placeholder={name}
+      >
         {(src, loading) => {
           return loading ? (
             LoadingIndicator
           ) : (
-            <a href={url} target="_blank">
+            <a
+              className="flex justify-center"
+              href={currentRestaurant.googleMapsUrl}
+              target="_blank"
+            >
               <img
                 className="hover:opacity-75 transition easy-in-out rounded image"
-                key={placeId}
+                key={currentRestaurant.placeId}
                 src={src}
-                alt={name}
+                alt={currentRestaurant.name}
               />
             </a>
           )
@@ -46,7 +42,9 @@ const Restaurant: FC<Props> = ({
       </ProgressiveImage>
       <div className="flex flex-row mt-4 justify-between">
         <div>
-          <h4 className="text-white ml- text-base font-heading">{address}</h4>
+          <h4 className="text-white text-base font-heading">
+            {truncateStringToLength(currentRestaurant.address, 25)}
+          </h4>
           <div className="flex">
             <svg
               className="fill-current text-white-500 w-4"
@@ -59,14 +57,26 @@ const Restaurant: FC<Props> = ({
                 />
               </g>
             </svg>
-            <h4 className="text-white ml-1 text-base font-heading">{rating}</h4>
+            <h4 className="text-white ml-1 text-base font-heading">
+              {currentRestaurant.rating}
+            </h4>
           </div>
         </div>
         <div>
-          <h4 className="text-white text-base font-heading">{distance}</h4>
-          <h4 className="text-white text-base font-heading">{duration}</h4>
+          <h4 className="text-white text-base font-heading">
+            {currentRestaurant.distanceToArrive}
+          </h4>
+          <h4 className="text-white text-base font-heading">
+            {currentRestaurant.durationToArrive}
+          </h4>
         </div>
       </div>
+      <a href={currentRestaurant.googleMapsUrl} target="_blank">
+        <div className="flex text-white text-base font-heading hover:opacity-75">
+          <MapsIcon />
+          <div className="ml-2">See in Maps</div>
+        </div>
+      </a>
     </div>
   )
 }

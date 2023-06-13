@@ -11,6 +11,9 @@ export const toRestaurant = (
     photoUrl: url,
     address: result.vicinity,
     googleMapsUrl: result.url,
+    distanceToArrive: 'n/a',
+    durationToArrive: 'n/a',
+    types: result.types,
     location: {
       lat: result.geometry?.location?.lat(),
       lng: result.geometry?.location?.lng(),

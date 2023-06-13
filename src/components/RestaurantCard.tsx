@@ -11,13 +11,14 @@ import { RestaurantResponse } from '../utils/types'
 import Restaurant from './Restaurant'
 import { ShuffleButton } from './ShuffleButton'
 import LoadingIndicator from './LoadingIndicator'
-import { filterRestaurants } from '../utils/utils'
+import { filterRestaurants, removeObjectById } from '../utils/utils'
 
 const RestaurantCard: React.FC = () => {
   const [restaurants, setRestaurants] = useState<RestaurantResponse[]>([])
   const [currentRestaurant, setCurrentRestaurant] =
     useState<RestaurantResponse | null>(null)
   const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
 
   useEffect(() => {
     loadGoogleMapsAPI().then(() => {
@@ -65,29 +66,31 @@ const RestaurantCard: React.FC = () => {
       if (fetchedDetails) {
         setRestaurants(fetchedDetails)
         setCurrentRestaurant(
-          filteredRestaurants[
-            Math.floor(Math.random() * fetchedDetails?.length)
-          ]
+          fetchedDetails[Math.floor(Math.random() * fetchedDetails?.length)]
         )
       }
       setLoading(false)
-    } catch (error) {
+    } catch (error: any) {
+      setError(error.message)
       setLoading(false)
-      console.log(error)
     }
   }
 
   const handleNextRestaurant = async () => {
+    if (restaurants.length === 1) getRandomRestaurant()
     let nextRestaurant: RestaurantResponse | null = null
-    while (
-      !nextRestaurant ||
-      nextRestaurant.placeId === currentRestaurant?.placeId
-    ) {
-      nextRestaurant =
-        restaurants[Math.floor(Math.random() * restaurants.length)]
-    }
+    nextRestaurant = restaurants[Math.floor(Math.random() * restaurants.length)]
     setCurrentRestaurant(nextRestaurant)
+    const newRestaurants = removeObjectById(restaurants, nextRestaurant.placeId)
+    setRestaurants(newRestaurants)
   }
+  if (error)
+    return (
+      <div className="h-screen flex items-center justify-center flex-col m-9">
+        {error}
+      </div>
+    )
+
   return (
     <div className="h-screen flex items-center justify-center flex-col m-9">
       {loading ? (
@@ -96,16 +99,7 @@ const RestaurantCard: React.FC = () => {
         <>
           {currentRestaurant && (
             <>
-              <Restaurant
-                name={currentRestaurant.name}
-                placeId={currentRestaurant.placeId}
-                photoUrl={currentRestaurant.photoUrl}
-                rating={currentRestaurant.rating}
-                address={currentRestaurant.address}
-                url={currentRestaurant.googleMapsUrl}
-                duration={currentRestaurant.durationToArrive}
-                distance={currentRestaurant.distanceToArrive}
-              />
+              <Restaurant currentRestaurant={currentRestaurant} />
               <ShuffleButton disabled={loading} onClick={handleNextRestaurant}>
                 <span className="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
                   Shuffle

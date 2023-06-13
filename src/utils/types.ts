@@ -8,4 +8,5 @@ export interface RestaurantResponse {
   googleMapsUrl: string | undefined
   distanceToArrive: string | undefined
   durationToArrive: string | undefined
+  types: string[] | undefined
 }

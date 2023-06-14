@@ -61,7 +61,7 @@ const RestaurantCard: React.FC = () => {
         filteredRestaurants
       )
 
-      await delay(1000)
+      await delay(500)
 
       if (fetchedDetails) {
         setRestaurants(fetchedDetails)

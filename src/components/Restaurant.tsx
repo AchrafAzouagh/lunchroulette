@@ -61,6 +61,12 @@ const Restaurant: FC<Props> = ({ currentRestaurant }) => {
               {currentRestaurant.rating}
             </h4>
           </div>
+          <a href={currentRestaurant.googleMapsUrl} target="_blank">
+            <div className="flex text-white text-base font-heading hover:opacity-75">
+              <MapsIcon />
+              <div className="ml-2">See in Maps</div>
+            </div>
+          </a>
         </div>
         <div>
           <h4 className="text-white text-base font-heading">
@@ -71,12 +77,6 @@ const Restaurant: FC<Props> = ({ currentRestaurant }) => {
           </h4>
         </div>
       </div>
-      <a href={currentRestaurant.googleMapsUrl} target="_blank">
-        <div className="flex text-white text-base font-heading hover:opacity-75">
-          <MapsIcon />
-          <div className="ml-2">See in Maps</div>
-        </div>
-      </a>
     </div>
   )
 }

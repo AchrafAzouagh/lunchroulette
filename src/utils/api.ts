@@ -33,6 +33,7 @@ export const getNearbyRestaurants = (location: {
   lng: number
 }): Promise<RestaurantResponse[]> => {
   return new Promise((resolve, reject) => {
+    let allResults: google.maps.places.PlaceResult[] = new Array()
     const placesService = new google.maps.places.PlacesService(
       document.createElement('div')
     )
@@ -43,9 +44,16 @@ export const getNearbyRestaurants = (location: {
         radius: SEARCH_RADIUS,
         type: 'restaurant',
       },
-      (results: google.maps.places.PlaceResult[] | null) => {
-        if (results) resolve(results.map((result) => toRestaurant(result)))
-        reject('No results')
+      (
+        results: google.maps.places.PlaceResult[] | null,
+        status,
+        pagination
+      ) => {
+        if (status !== 'OK' || !results) reject('No results')
+        allResults.unshift(...results!)
+        if (pagination && pagination.hasNextPage) {
+          pagination?.nextPage()
+        } else resolve(allResults.map((result) => toRestaurant(result)))
       }
     )
   })

@@ -11,13 +11,14 @@ import { RestaurantResponse } from '../utils/types'
 import Restaurant from './Restaurant'
 import { ShuffleButton } from './ShuffleButton'
 import LoadingIndicator from './LoadingIndicator'
-import { filterRestaurants, removeObjectById } from '../utils/utils'
+import { filterRestaurants } from '../utils/utils'
 
 const RestaurantCard: React.FC = () => {
   const [restaurants, setRestaurants] = useState<RestaurantResponse[]>([])
   const [currentRestaurant, setCurrentRestaurant] =
     useState<RestaurantResponse | null>(null)
   const [loading, setLoading] = useState(false)
+  const [lastRestaurantIndex, setLastRestaurantIndex] = useState(0)
   const [error, setError] = useState('')
 
   useEffect(() => {
@@ -65,24 +66,21 @@ const RestaurantCard: React.FC = () => {
 
       if (fetchedDetails) {
         setRestaurants(fetchedDetails)
-        setCurrentRestaurant(
-          fetchedDetails[Math.floor(Math.random() * fetchedDetails?.length)]
-        )
+        setCurrentRestaurant(fetchedDetails[lastRestaurantIndex])
       }
       setLoading(false)
     } catch (error: any) {
-      setError(error.message)
+      setError(error.message ? error.message : error)
       setLoading(false)
     }
   }
 
   const handleNextRestaurant = async () => {
-    if (restaurants.length === 1) getRandomRestaurant()
+    if (lastRestaurantIndex == restaurants.length - 2) setLastRestaurantIndex(0)
     let nextRestaurant: RestaurantResponse | null = null
-    nextRestaurant = restaurants[Math.floor(Math.random() * restaurants.length)]
+    nextRestaurant = restaurants[lastRestaurantIndex + 1]
+    setLastRestaurantIndex((prevIndex) => prevIndex + 1)
     setCurrentRestaurant(nextRestaurant)
-    const newRestaurants = removeObjectById(restaurants, nextRestaurant.placeId)
-    setRestaurants(newRestaurants)
   }
   if (error)
     return (

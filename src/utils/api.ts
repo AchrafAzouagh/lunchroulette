@@ -1,7 +1,6 @@
 import { Loader } from '@googlemaps/js-api-loader'
 import { toRestaurant } from './mapper'
 import { RestaurantResponse } from './types'
-import { SEARCH_RADIUS } from './constants'
 
 const loader = new Loader({
   apiKey: process.env.MAPS_API_KEY as string,
@@ -41,15 +40,15 @@ export const getNearbyRestaurants = (location: {
       {
         location,
         openNow: true,
-        radius: SEARCH_RADIUS,
         type: 'restaurant',
+        rankBy: google.maps.places.RankBy.DISTANCE,
       },
       (
         results: google.maps.places.PlaceResult[] | null,
         status,
         pagination
       ) => {
-        if (status !== 'OK' || !results) reject('No results')
+        if (status !== 'OK' || !results) reject(status)
         allResults.unshift(...results!)
         if (pagination && pagination.hasNextPage) {
           pagination?.nextPage()
@@ -68,9 +67,9 @@ export const getRestaurantDetails = (
   return new Promise((resolve, reject) => {
     placesService.getDetails(
       { placeId: restaurantId },
-      (result: google.maps.places.PlaceResult | null) => {
+      (result: google.maps.places.PlaceResult | null, status) => {
         if (result) resolve(result)
-        reject('No results')
+        if (status !== 'OK' || !result) reject(status)
       }
     )
   })
@@ -94,9 +93,9 @@ export const getDistanceToRestaurant = (
   return new Promise((resolve, reject) => {
     distanceService.getDistanceMatrix(
       options,
-      (response: google.maps.DistanceMatrixResponse | null) => {
+      (response: google.maps.DistanceMatrixResponse | null, status) => {
         if (response) resolve(response)
-        reject('No results')
+        if (status !== 'OK' || !response) reject(status)
       }
     )
   })

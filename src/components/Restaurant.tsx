@@ -19,7 +19,7 @@ const Restaurant: FC<Props> = ({ currentRestaurant }) => {
       </a>
       <ProgressiveImage
         src={currentRestaurant.photoUrl as string}
-        placeholder={name}
+        placeholder={currentRestaurant.name}
       >
         {(src, loading) => {
           return loading ? (

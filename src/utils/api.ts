@@ -3,7 +3,7 @@ import { toRestaurant } from './mapper'
 import { RestaurantResponse } from './types'
 
 const loader = new Loader({
-  apiKey: process.env.MAPS_API_KEY as string,
+  apiKey: 'AIzaSyCICbwAjqL9Qd_9lKbbeLEY-8hGeYOPJuQ',
   version: 'weekly',
 })
 
